@@ -5,3 +5,7 @@ WordPress plugin which redirects from the root site of a multisite project to a 
 The plugin provides a configuration page where supported languages, redirect targets and the default language can be configured.
 
 The plugin should be activated only on the root site. Once redirected it is useless and shouldn't be active on the language specific network site.
+
+The plugin is hosted on wordpress.org as well: [http://wordpress.org/plugins/language-redirect/](http://wordpress.org/plugins/language-redirect/)
+
+*This plugin was originally developed for [monkkee](http://www.monkkee.com/) and is inspired by [oncleben31.cc](http://oncleben31.cc)*

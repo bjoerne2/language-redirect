@@ -19,7 +19,7 @@ The plugin provides a configuration page where supported languages, redirect tar
 
 The plugin should be activated only on the root site. Once redirected it is useless and shouldn't be active on the language specific network site.
 
-The plugin is developed in [Github](https://github.com/bjoerne2/language-redirect). Feel free to fork the project or create pull requests. 
+The plugin is developed on [Github](https://github.com/bjoerne2/language-redirect). Feel free to fork the project or create pull requests. 
 
 *This plugin was originally developed for [monkkee](http://www.monkkee.com/) and is inspired by [oncleben31.cc](http://oncleben31.cc)*
 
