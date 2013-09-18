@@ -33,10 +33,15 @@ function language_redirect_plugins_loaded() {
 	$language = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
 	$language = strtolower(substr(chop($language[0]), 0, 2));
 	$redirect_location = language_redirect_get_redirect_location($language);
-	if ($redirect_location != null) {
-		header("Location: ".site_url($redirect_location));
-		exit;
+	if ($redirect_location == null) {
+		return;
 	}
+	if ($redirect_location[0] == '/') {
+		header("Location: ".site_url($redirect_location));
+	} else {
+		header("Location: ".$redirect_location);
+	}
+	exit;
 }
 
 function language_redirect_is_login() {
