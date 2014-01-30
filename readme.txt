@@ -3,7 +3,7 @@ Contributors: bjoerne
 Tags: language, redirect, header, location
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XS98Y5ASSH5S4
 Requires at least: 3.4
-Tested up to: 3.6.1
+Tested up to: 3.8.1
 Stable tag: trunk
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
