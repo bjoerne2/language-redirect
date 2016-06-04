@@ -30,14 +30,27 @@ function language_redirect_plugins_loaded() {
 	if ( language_redirect_is_login() ) {
 		return;
 	}
-	if ( array_key_exists( 'HTTP_ACCEPT_LANGUAGE', $_SERVER ) ) {
-		$language = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
-		$language = strtolower( substr( chop( $language[0] ), 0, 2 ) );
-		$redirect_location = language_redirect_get_redirect_location( $language );
-	} else {
-		$redirect_location = language_redirect_get_default_redirect_location();
+
+	$redirect_location = language_redirect_get_default_redirect_location();
+
+	if ( array_key_exists( 'HTTP_ACCEPT_LANGUAGE', $_SERVER ) && strlen( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) >= 2 ) {
+		$languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+
+		foreach ($languages as $current_language) {
+			$current_language = trim( strtolower( $current_language ) );
+			$current_language = false !== strpos( $current_language, ';' )
+				? substr( $current_language, 0, strpos( $current_language, ';' ) )
+				: $current_language;
+
+			$redirect_location = language_redirect_get_redirect_location( $current_language );
+
+			if ( null !== $redirect_location ) {
+				break;
+			}
+		}
 	}
-	if ( $redirect_location == null ) {
+
+	if ( null === $redirect_location ) {
 		return;
 	}
 	if ( $redirect_location[0] == '/' ) {
@@ -64,10 +77,11 @@ function language_redirect_is_login() {
 
 function language_redirect_get_redirect_location( $language ) {
 	$redirect_location = language_redirect_get_redirect_location_from_mapping( $language );
-	if ( null != $redirect_location ) {
-		return $redirect_location;
+	if ( null === $redirect_location && 2 < strlen( $language ) ) {
+		$redirect_location = language_redirect_get_redirect_location_from_mapping( substr( $language, 0, 2 ) );
 	}
-	return language_redirect_get_default_redirect_location();
+
+	return $redirect_location;
 }
 
 function language_redirect_get_redirect_location_from_mapping( $language ) {
@@ -80,7 +94,7 @@ function language_redirect_get_redirect_location_from_mapping( $language ) {
 		if ( ! $pos_of_equals ) {
 			continue;
 		}
-		$mapping_language = substr( $line, 0, $pos_of_equals );
+		$mapping_language = strtolower( substr( $line, 0, $pos_of_equals ) );
 		if ( $mapping_language == $language ) {
 			return substr( $line, $pos_of_equals + 1 );
 		}
