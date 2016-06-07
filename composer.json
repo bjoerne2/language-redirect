@@ -1,0 +1,21 @@
+{
+  "name": "bjoerne.com/language-redirect",
+  "description": "Redirects from the root site of a multisite project to a language specific network site.",
+  "authors": [
+    {
+      "name": "bjoerne",
+      "email": "info@bjoerne.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "phpunit/phpunit": "3.7.29"
+  },
+  "require-dev": {
+    "behat/behat": "v2.5.3",
+    "behat/mink": "~1.6@dev",
+    "behat/mink-extension": "*",
+    "behat/mink-selenium2-driver": "1.2.*@dev",
+    "symfony/console": "v2.4.5"
+  }
+}

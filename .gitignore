@@ -1,1 +1,4 @@
-.project
+/bin
+/install
+/vendor
+/behat.yml

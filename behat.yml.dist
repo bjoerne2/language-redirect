@@ -1,0 +1,36 @@
+default:
+  paths:
+    features: features
+  context:
+    parameters:
+      webserver_dir: <your_webserver_dir>
+      webserver_url: <your_webserver_url>
+      install_files:
+        wordpress: <your_wordpress e.g. wordpress-4.0-de_DE.zip>
+        sqlite_integration: <your_sqlite_integration e.g. sqlite-integration.1.6.3.zip>
+        disable_google_fonts: <your_disable_google_fonts e.g. disable-google-fonts.1.0.zip>
+      database_file: <your_database_file>
+      selenium_implicit_timeout: 5000
+  extensions:
+    Behat\MinkExtension\Extension:
+      base_url: <your_base_url, same as webserver_url above>
+      default_session: selenium2
+      browser_name: 'firefox'
+      selenium2:
+        capabilities:
+          browser: firefox
+          version: 26
+          firefox:
+            binary: <path_to_firefox_bin>
+  formatter:
+    name:                     pretty
+    parameters:
+      decorated:              false
+      verbose:                false
+      time:                   true
+      language:               en
+      output_path:            null
+      multiline_arguments:    true
+      paths:                  false
+  filters:
+    tags:                 ~@devonly
