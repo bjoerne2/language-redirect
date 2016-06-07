@@ -30,7 +30,7 @@ Feature: Use plugin
     When I go to "/"
     Then I should see "WordPress - Web publishing software"
 
-  Scenario: Redirect based on redirect mapping
+  Scenario: Redirect based on redirect mapping and first accepted language
     Given a fresh WordPress is installed
     And the plugin "language-redirect" is installed (from source)
     And the plugin "language-redirect" is activated
@@ -39,6 +39,30 @@ Feature: Use plugin
       """
       de=/license.txt
       en=/unknown.txt
+      """
+    When I go to "/"
+    Then I should see "WordPress - Web publishing software"
+
+  Scenario: Redirect based on redirect mapping and second accepted language
+    Given a fresh WordPress is installed
+    And the plugin "language-redirect" is installed (from source)
+    And the plugin "language-redirect" is activated
+    And the option "language_redirect_default_redirect_location" has the value ""
+    And the option "language_redirect_redirect_mapping" has the value:
+      """
+      en-us=/license.txt
+      """
+    When I go to "/"
+    Then I should see "WordPress - Web publishing software"
+
+  Scenario: Redirect based on redirect mapping and third accepted language
+    Given a fresh WordPress is installed
+    And the plugin "language-redirect" is installed (from source)
+    And the plugin "language-redirect" is activated
+    And the option "language_redirect_default_redirect_location" has the value ""
+    And the option "language_redirect_redirect_mapping" has the value:
+      """
+      en=/license.txt
       """
     When I go to "/"
     Then I should see "WordPress - Web publishing software"

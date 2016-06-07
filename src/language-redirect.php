@@ -4,7 +4,7 @@ Plugin Name: Language Redirect
 Plugin URI: http://www.bjoerne.com
 Description: Redirects from the root site of a multisite project to a language specific network site.
 Author: Björn Weinbrenner
-Version: 1.0.1
+Version: 1.0.2
 Author URI: http://www.bjoerne.com
 */
 
@@ -31,9 +31,19 @@ function language_redirect_plugins_loaded() {
 		return;
 	}
 	if ( array_key_exists( 'HTTP_ACCEPT_LANGUAGE', $_SERVER ) ) {
-		$language = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
-		$language = strtolower( substr( chop( $language[0] ), 0, 2 ) );
-		$redirect_location = language_redirect_get_redirect_location( $language );
+		// Thanks to http://www.thefutureoftheweb.com/blog/use-accept-language-header for the following lines of code
+		preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $header_matchings);
+		if (count($header_matchings[1])) {
+			// create a list like "en" => 0.8
+			$language_to_priority_map = array_combine( $header_matchings[1], $header_matchings[4] );
+			// set default to 1 for any without q factor
+			foreach ($language_to_priority_map as $lang => $val) {
+				if ( $val === '' ) $language_to_priority_map[$lang] = 1;
+			}
+			// sort list based on value
+			arsort( $language_to_priority_map, SORT_NUMERIC );
+		}
+		$redirect_location = language_redirect_get_redirect_location( array_keys( $language_to_priority_map ) );
 	} else {
 		$redirect_location = language_redirect_get_default_redirect_location();
 	}
@@ -51,7 +61,7 @@ function language_redirect_plugins_loaded() {
 function language_redirect_is_login() {
 	$request_protocol = array_key_exists( 'HTTPS', $_SERVER ) && $_SERVER['HTTPS'] ? 'https' : 'http';
 	$request_port     = $_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT'];
-	$request_url      = $request_protocol.'://'.$_SERVER['HTTP_HOST'].$request_port.$_SERVER['PHP_SELF'];
+	$request_url      = $request_protocol . '://' . $_SERVER['HTTP_HOST'] . $request_port . $_SERVER['PHP_SELF'];
 	if ( strpos( $request_url, site_url() ) !== 0 ) {
 		return false;
 	}
@@ -62,10 +72,19 @@ function language_redirect_is_login() {
 	return false;
 }
 
-function language_redirect_get_redirect_location( $language ) {
-	$redirect_location = language_redirect_get_redirect_location_from_mapping( $language );
-	if ( null != $redirect_location ) {
-		return $redirect_location;
+function language_redirect_get_redirect_location( $languages ) {
+	foreach ( $languages as $language ) {
+		$redirect_location = language_redirect_get_redirect_location_from_mapping( $language );
+		if ( null != $redirect_location ) {
+			return $redirect_location;
+		}
+	}
+	foreach ( $languages as $language ) {
+		$language_prefix = substr( $language, 0, 2 );
+		$redirect_location = language_redirect_get_redirect_location_from_mapping( $language_prefix );
+		if ( null != $redirect_location ) {
+			return $redirect_location;
+		}
 	}
 	return language_redirect_get_default_redirect_location();
 }
@@ -81,7 +100,7 @@ function language_redirect_get_redirect_location_from_mapping( $language ) {
 			continue;
 		}
 		$mapping_language = substr( $line, 0, $pos_of_equals );
-		if ( $mapping_language == $language ) {
+		if ( 0 === strcasecmp( $mapping_language, $language ) ) {
 			return substr( $line, $pos_of_equals + 1 );
 		}
 	}

@@ -39,4 +39,9 @@ The plugin is developed on [Github](https://github.com/bjoerne2/language-redirec
 
 = 1.0.1 =
 * Handle missing HTTP_ACCEPT_LANGUAGE header, see [https://wordpress.org/support/topic/undefined-index-http_accept_language](https://wordpress.org/support/topic/undefined-index-http_accept_language)
-* Cleanup code to follow WP code conventions
+* Cleanup code concerning WP code conventions
+
+= 1.0.2 =
+* Consider all languages of HTTP_ACCEPT_LANGUAGE based on their q factor
+* Support country based locales like en-US
+* Try to match languages prefixes of country based locales as a fallback, e.g. given 'en-US' in header and 'en' in configuration
