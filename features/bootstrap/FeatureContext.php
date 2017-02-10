@@ -94,33 +94,37 @@ class FeatureContext extends MinkContext {
 	/**
 	 * @Given /^I activate the plugin "([^"]*)"$/
 	 */
-	public function activate_plugin_manually( $plugin_id ) {
-		$page = $this->get_page();
-		$plugin_area = $page->find( 'css', "tr[data-slug=$plugin_id]" );
-		assertNotNull( $plugin_area );
-		$plugin_area->find( 'xpath', "//a[contains(@href, 'action=activate')]" )->click();
+	public function activate_plugin_manually( $plugin_name ) {
+		$link = $this->get_plugin_area( $plugin_name )->find( 'xpath', "//a[contains(@href, 'action=activate')]" );
+		PHPUnit_Framework_Assert::assertNotNull( $link, 'Link not found' );
+		$link->click();
 	}
 
 	/**
 	 * @Given /^I deactivate the plugin "([^"]*)"$/
 	 */
-	public function deactivate_plugin_manually( $plugin_id ) {
-		$page = $this->get_page();
-		$plugin_area = $page->find( 'css', "tr[data-slug=$plugin_id]" );
-		assertNotNull( $plugin_area );
-		$plugin_area->find( 'xpath', "//a[contains(@href, 'action=deactivate')]" )->click();
+	public function deactivate_plugin_manually( $plugin_name ) {
+		$link = $this->get_plugin_area( $plugin_name )->find( 'xpath', "//a[contains(@href, 'action=deactivate')]" );
+		PHPUnit_Framework_Assert::assertNotNull( $link, 'Link not found' );
+		$link->click();
+		PHPUnit_Framework_Assert::assertNotNull( $this->get_page()->find( 'css', '.updated' ), "Can't find element" );
 	}
 
 	/**
 	 * @Given /^I uninstall the plugin "([^"]*)"$/
 	 */
-	public function uninstall_plugin_manually( $plugin_id ) {
-		$page = $this->get_page();
-		$plugin_area = $page->find( 'css', "tr[data-slug=$plugin_id]" );
-		assertNotNull( $plugin_area );
-		$plugin_area->find( 'xpath', "//a[contains(@href, 'action=delete-selected')]" )->click();
-		$form = $this->get_page()->find( 'xpath', "//form[contains(@action, 'action=delete-selected')]" );
-		$form->find( 'css', '#submit' )->press();
+	public function uninstall_plugin_manually( $plugin_name ) {
+		$link = $this->get_plugin_area( $plugin_name )->find( 'xpath', "//a[contains(@href, 'action=delete-selected')]" );
+		PHPUnit_Framework_Assert::assertNotNull( $link, 'Link not found' );
+		$link->click();
+		$this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
+		PHPUnit_Framework_Assert::assertNotNull( $this->get_page()->find( 'css', '.updated' ), "Can't find element" );
+	}
+
+	private function get_plugin_area( $plugin_name ) {
+		$plugin_area = $this->get_page()->find( 'xpath', "//tr[td/strong/text() = '$plugin_name']" );
+		PHPUnit_Framework_Assert::assertNotNull( $plugin_area, 'Plugin area not found' );
+		return $plugin_area;
 	}
 
 	/**

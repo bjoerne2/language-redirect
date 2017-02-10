@@ -27,7 +27,10 @@ function language_redirect_add_config_page() {
 }
 
 function language_redirect_plugins_loaded() {
-	if ( language_redirect_is_login() ) {
+	if ( ! defined( 'WP_USE_THEMES' ) ) {
+		return;
+	}
+	if ( language_redirect_is_robots_txt() ) {
 		return;
 	}
 	if ( array_key_exists( 'HTTP_ACCEPT_LANGUAGE', $_SERVER ) ) {
@@ -58,18 +61,10 @@ function language_redirect_plugins_loaded() {
 	exit;
 }
 
-function language_redirect_is_login() {
-	$request_protocol = array_key_exists( 'HTTPS', $_SERVER ) && $_SERVER['HTTPS'] ? 'https' : 'http';
-	$request_port     = $_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT'];
-	$request_url      = $request_protocol . '://' . $_SERVER['HTTP_HOST'] . $request_port . $_SERVER['PHP_SELF'];
-	if ( strpos( $request_url, site_url() ) !== 0 ) {
-		return false;
-	}
-	$relative_url = substr( $request_url, strlen( site_url() ) );
-	if ( $relative_url == '/wp-login.php' ) {
-		return true;
-	}
-	return false;
+function language_redirect_is_robots_txt() {
+	$home_path = parse_url( home_url() );
+	$robots_rewrite = ( empty( $home_path['path'] ) || '/' == $home_path['path'] ) ? array( 'robots\.txt$' => 'index.php' . '?robots=1' ) : array();
+	return $robots_rewrite;
 }
 
 function language_redirect_get_redirect_location( $languages ) {

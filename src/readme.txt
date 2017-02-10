@@ -3,7 +3,7 @@ Contributors: bjoerne
 Tags: language, redirect, header, location
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XS98Y5ASSH5S4
 Requires at least: 3.4
-Tested up to: 4.3.4
+Tested up to: 4.7.2
 Stable tag: trunk
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -45,3 +45,8 @@ The plugin is developed on [Github](https://github.com/bjoerne2/language-redirec
 * Consider all languages of HTTP_ACCEPT_LANGUAGE based on their q factor
 * Support country based locales like en-US
 * Try to match languages prefixes of country based locales as a fallback, e.g. given 'en-US' in header and 'en' in configuration
+
+= 1.0.3 =
+* Redirect only if /index.php was invoked. This is the case for all frontend visits.
+* Don't redirect robots.txt
+* Delete options when plugin is uninstalled
