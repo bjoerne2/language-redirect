@@ -4,7 +4,7 @@ Plugin Name: Language Redirect
 Plugin URI: http://www.bjoerne.com
 Description: Redirects from the root site of a multisite project to a language specific network site.
 Author: Björn Weinbrenner
-Version: 1.0.2
+Version: 1.0.4
 Author URI: http://www.bjoerne.com
 */
 
@@ -62,9 +62,7 @@ function language_redirect_plugins_loaded() {
 }
 
 function language_redirect_is_robots_txt() {
-	$home_path = parse_url( home_url() );
-	$robots_rewrite = ( empty( $home_path['path'] ) || '/' == $home_path['path'] ) ? array( 'robots\.txt$' => 'index.php' . '?robots=1' ) : array();
-	return $robots_rewrite;
+	return false; // TODO
 }
 
 function language_redirect_get_redirect_location( $languages ) {

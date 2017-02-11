@@ -1,6 +1,6 @@
 === Language Redirect ===
 Contributors: bjoerne
-Tags: language, redirect, header, location
+Tags: language, redirect, header, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XS98Y5ASSH5S4
 Requires at least: 3.4
 Tested up to: 4.7.2
@@ -50,3 +50,6 @@ The plugin is developed on [Github](https://github.com/bjoerne2/language-redirec
 * Redirect only if /index.php was invoked. This is the case for all frontend visits.
 * Don't redirect robots.txt
 * Delete options when plugin is uninstalled
+
+= 1.0.4 =
+* Remove buggy robots.txt handling
