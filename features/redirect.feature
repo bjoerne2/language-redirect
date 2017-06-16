@@ -79,7 +79,7 @@ Feature: Use plugin
     When I go to "/"
     Then I should see "WordPress - Web publishing software"
 
-  Scenario: Do not redirect when mapping doesn't match and default redirect location is not set
+  Scenario: Do not redirect if mapping doesn't match and default redirect location is not set
     Given a fresh WordPress is installed
     And the plugin "language-redirect" is installed (from source)
     And the plugin "language-redirect" is activated
@@ -90,3 +90,11 @@ Feature: Use plugin
       """
     When I go to "/"
     Then I should see "Hallo Welt!"
+
+  Scenario: Do not redirect if xmlrpc.php is invoked
+    Given a fresh WordPress is installed
+    And the plugin "language-redirect" is installed (from source)
+    And the plugin "language-redirect" is activated
+    And the option "language_redirect_default_redirect_location" has the value "/license.txt"
+    When I go to "/xmlrpc.php"
+    Then I should not see "WordPress - Web publishing software"

@@ -15,6 +15,6 @@ Feature: Install and activate plugin
     And the plugin "language-redirect" is installed (from source)
     And I am logged as an administrator
     When I go to "/wp-admin/plugins.php"
-    And I activate the plugin "language-redirect"
+    And I activate the plugin "Language Redirect"
     Then I should see the message "Plugin activated"
     And the plugin "language-redirect" is activated
