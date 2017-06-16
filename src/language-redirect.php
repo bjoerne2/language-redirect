@@ -54,7 +54,7 @@ function language_redirect_plugins_loaded() {
 		return;
 	}
 	if ( $redirect_location[0] == '/' ) {
-		header( 'Location: ' . site_url( $redirect_location ) );
+		header( 'Location: ' . home_url( $redirect_location ) );
 	} else {
 		header( 'Location: ' . $redirect_location );
 	}
